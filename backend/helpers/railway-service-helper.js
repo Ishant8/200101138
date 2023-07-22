@@ -1,16 +1,16 @@
 const axios = require('axios');
 
-const registerCompany = async()=>{
-    try{
+const registerCompany = async () => {
+    try {
         let targetUrl = 'http://20.244.56.144/train/register';
         let requestData = {
-            "companyName" : "Train Central",
-            "ownerName" : "Ishant Yadav",
-            "rollNo" : "200101138",
-            "ownerEmail" : "2020501189.ishant@ug.sharda.ac.in",
-            "accessCode" : "JnNPGs"
+            "companyName": "Train Central",
+            "ownerName": "Ishant Yadav",
+            "rollNo": "200101138",
+            "ownerEmail": "2020501189.ishant@ug.sharda.ac.in",
+            "accessCode": "JnNPGs"
         };
-    
+
         let config = {
             method: 'post',
             url: targetUrl,
@@ -18,23 +18,23 @@ const registerCompany = async()=>{
         }
 
         let response = await axios(config);
-        if(response){
+        if (response) {
             console.log(response)
             return response
         }
-        else{
+        else {
             return false;
         }
     }
-    catch(error){
+    catch (error) {
         console.log(error);
         return error;
     }
-    
+
 }
 
-const getAccessToken = async()=>{
-    try{
+const getAccessToken = async () => {
+    try {
         let targetUrl = 'http://20.244.56.144/train/auth';
         let requestData = {
             "companyName": "Train Central",
@@ -44,7 +44,7 @@ const getAccessToken = async()=>{
             "ownerEmail": "2020501189.ishant@ug.sharda.ac.in",
             "rollNo": "2020501189"
         };
-    
+
         let config = {
             method: 'post',
             url: targetUrl,
@@ -52,64 +52,81 @@ const getAccessToken = async()=>{
         }
 
         let response = await axios(config);
-        if(response){
+        if (response) {
             return response.data
         }
-        else{
+        else {
             return false;
         }
     }
-    catch(error){
+    catch (error) {
         console.log(error);
         return error;
     }
-    
+
 }
 
-const getTrains = async()=>{
-    try{
+const getTrains = async () => {
+    try {
         let token = await getAccessToken();
         const accessToken = token.access_token;
-        let response = await axios.get('http://20.244.56.144/train/trains',{
+        let response = await axios.get('http://20.244.56.144/train/trains', {
             headers: {
-                'Authorization' : `Bearer ${accessToken}`
+                'Authorization': `Bearer ${accessToken}`
             }
         }
         )
-        if(response.data){
-            console.log(response.data)
-            return response.data
+        if (response.data) {
+            const now = new Date();
+            const currentHour = now.getHours();
+            const currentMinute = now.getMinutes();
+
+            const filteredDepartures = response.data.filter(departure => {
+                const { Hours, Minutes } = departure.departureTime;
+                const departureHour = parseInt(Hours);
+                const departureMinute = parseInt(Minutes);
+
+                const timeDifference = (departureHour - currentHour) * 60 + (departureMinute - currentMinute);
+
+                return timeDifference >= 30 && timeDifference <= 12 * 60;
+            });
+
+            filteredDepartures.sort((a, b) => {
+                const timeA = parseInt(a.departureTime.hours) * 60 + parseInt(a.departureTime.minutes);
+                const timeB = parseInt(b.departureTime.hours) * 60 + parseInt(b.departureTime.minutes);
+                return timeB - timeA;
+            });
+
+            return filteredDepartures;
         }
         else return false;
-        }
-    catch(error){
+    }
+    catch (error) {
         return error;
     }
-    
+
 }
 
-const getTrain = async(trainNumber)=>{
-    try{
+const getTrain = async (trainNumber) => {
+    try {
         let token = await getAccessToken();
         const accessToken = token.access_token;
-        let response = await axios.get(`http://20.244.56.144/train/trains/${trainNumber}`,{
+        let response = await axios.get(`http://20.244.56.144/train/trains/${trainNumber}`, {
             headers: {
-                'Authorization' : `Bearer ${accessToken}`
+                'Authorization': `Bearer ${accessToken}`
             }
         }
         )
-        if(response.data){
+        if (response.data) {
             return response.data
         }
         else return false;
-        }
-    catch(error){
+    }
+    catch (error) {
         return error;
     }
-    
-}
 
-getTrains()
+}
 
 module.exports = {
     registerCompany,
