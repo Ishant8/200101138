@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 
-const apiRoutes = require('./railway_dashboard/routes/railway-service-routes');
+const apiRoutes = require('../frontend/railway_dashboard/routes/railway-service-routes');
 const port = process.env.PORT || 4000;
 
 const cookieParser = require('cookie-parser');
