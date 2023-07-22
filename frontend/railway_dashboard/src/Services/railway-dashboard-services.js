@@ -5,6 +5,15 @@ const getTrains =  async ()=> {
     return response.data;
 }
 
+const getTrain =  async (number)=> {
+    const formdata = {
+        trainNumber: number
+    }
+    const response = await axios.post('/api/railway-service/get-train', formdata);
+    return response.data;
+}
+
 export {
-    getTrains
+    getTrains,
+    getTrain
 }

@@ -85,8 +85,12 @@ const getTrains = async () => {
                 const { Hours, Minutes } = departure.departureTime;
                 const departureHour = parseInt(Hours);
                 const departureMinute = parseInt(Minutes);
+                let timeDifference;
 
-                const timeDifference = (departureHour - currentHour) * 60 + (departureMinute - currentMinute);
+                if(currentHour < departureHour) { timeDifference = (departureHour - currentHour) * 60 + (departureMinute - currentMinute)}
+                else{
+                     timeDifference = (currentHour - departureHour) * 60 + (departureMinute - currentMinute);
+                }
 
                 return timeDifference >= 30 && timeDifference <= 12 * 60;
             });

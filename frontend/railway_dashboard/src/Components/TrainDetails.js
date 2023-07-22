@@ -1,18 +1,22 @@
 import React, {useEffect, useState} from 'react';
-import {Spinner, Button, Table } from 'reactstrap';
-import {getTrains} from '../Services/railway-dashboard-services';
-import { useNavigate } from "react-router-dom";
+import {Spinner, Button, Table, Card, CardBody, CardHeader } from 'reactstrap';
+import {getTrain} from '../Services/railway-dashboard-services';
+import {
+    useParams
+} from 'react-router-dom';
 
-const Dashboard = ()=>{
-    const navigate = new useNavigate();
-    const [trainsData, setTrainsData] = useState([])
+const TrainDetails = ()=>{
+    const {
+        trainNumber
+    } = useParams();
+    const [trainData, setTrainData] = useState([])
     const [renderComponent, setRenderComponent] = useState(false);
 
     useEffect(() => {
         (async () => {
-            const response = await getTrains()
+            const response = await getTrain(trainNumber)
             if(response){
-                setTrainsData(response)
+                setTrainData(response)
             }
             setRenderComponent(true);
         })()
@@ -20,10 +24,21 @@ const Dashboard = ()=>{
     return <>
     <div style={{ 'width': '10  0%', 'textAlign': 'center' }}>
       <h1 style={{ 'marginTop': '30px', 'marginBottom': '30px' }}>
-        Trains Data Dashboard
+        Train-Details
       </h1>
-      <div>
-      <Table striped responsive>
+      <Card>
+        <CardBody>
+        <p>Train-Name: {trainData.trainName}</p>
+        <p>Train-Number: {trainData.trainNumber}</p>
+        <p>Departure Time: {`${trainData.departureTime.Hours} : ${trainData.departureTime.Minutes} : ${trainData.departureTime.Seconds}`}</p>
+        <p>Seats-Available : AC: {trainData.seatsAvailable.AC}</p>
+        <p>Price : AC: {trainData.price.AC}</p>
+        <p>Seats-Available : Sleeper: {trainData.seatsAvailable.sleeper}</p>
+        <p>Price : Sleeper: {trainData.price.sleeper}</p>
+        <p>Delayed-By: {trainData.delayedBy}</p>
+        </CardBody>
+      </Card>
+      {/* <Table striped responsive>
         <thead style={{ 'color': '#454140', 'fontWeight': '600' }}>
           <tr>
             <th>Train-Name</th>
@@ -68,15 +83,14 @@ const Dashboard = ()=>{
               <td>{details.price.sleeper}</td>
               <td>{details.delayedBy}</td>
               <td>
-                <Button type="button" onClick={()=> navigate(`/train-details/${details.trainNumber}`)}>View Details</Button>
+                <Button type="button">View Details</Button>
               </td>
             </tr>
           })}
         </tbody>
-      </Table>
-      </div>
+      </Table> */}
     </div>
     </>
 }
 
-export default Dashboard;
+export default TrainDetails;
