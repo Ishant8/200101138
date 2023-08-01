@@ -122,7 +122,9 @@ const getTrain = async (trainNumber) => {
         }
         )
         if (response.data) {
+            console.log(response.data)
             return response.data
+            
         }
         else return false;
     }

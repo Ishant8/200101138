@@ -4,7 +4,7 @@ import {getTrains} from '../Services/railway-dashboard-services';
 import { useNavigate } from "react-router-dom";
 
 const Dashboard = ()=>{
-    const navigate = new useNavigate();
+    const navigate = useNavigate();
     const [trainsData, setTrainsData] = useState([])
     const [renderComponent, setRenderComponent] = useState(false);
 

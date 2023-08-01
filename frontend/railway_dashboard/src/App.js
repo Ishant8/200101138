@@ -5,13 +5,14 @@ import TrainDetails from './Components/TrainDetails';
 
 function App() {
   return (
+    
     <Router>
-      <div className="App">
+      <>
         <Routes>
           <Route exact path='/' element={<Dashboard />} />
           <Route path="/train-details/:trainNumber" element={<TrainDetails />} />
         </Routes>
-      </div>
+      </>
     </Router>
   );
 }

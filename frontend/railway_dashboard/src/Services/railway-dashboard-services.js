@@ -10,6 +10,7 @@ const getTrain =  async (number)=> {
         trainNumber: number
     }
     const response = await axios.post('/api/railway-service/get-train', formdata);
+    console.log(response);
     return response.data;
 }
 

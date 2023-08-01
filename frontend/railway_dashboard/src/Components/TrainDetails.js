@@ -1,41 +1,43 @@
-import React, {useEffect, useState} from 'react';
-import {Spinner, Button, Table, Card, CardBody, CardHeader } from 'reactstrap';
-import {getTrain} from '../Services/railway-dashboard-services';
+import React, { useEffect, useState } from 'react';
+import { Spinner, Button, Table, Card, CardBody, CardHeader } from 'reactstrap';
+import { getTrain } from '../Services/railway-dashboard-services';
 import {
-    useParams
+  useParams
 } from 'react-router-dom';
 
-const TrainDetails = ()=>{
-    const {
-        trainNumber
-    } = useParams();
-    const [trainData, setTrainData] = useState([])
-    const [renderComponent, setRenderComponent] = useState(false);
+const TrainDetails = () => {
+  const {
+    trainNumber
+  } = useParams();
+  const [trainData, setTrainData] = useState([])
+  const [renderComponent, setRenderComponent] = useState(false);
 
-    useEffect(() => {
-        (async () => {
-            const response = await getTrain(trainNumber)
-            if(response){
-                setTrainData(response)
-            }
-            setRenderComponent(true);
-        })()
-    }, [])
-    return <>
+  useEffect(() => {
+    (async () => {
+      const response = await getTrain(trainNumber)
+
+      if (response) {
+        setTrainData(response)
+      }
+      setRenderComponent(true);
+      
+    })()
+  }, [])
+  return <>
     <div style={{ 'width': '10  0%', 'textAlign': 'center' }}>
       <h1 style={{ 'marginTop': '30px', 'marginBottom': '30px' }}>
-        Train-Details
+        Train-Details                                                     
       </h1>
       <Card>
         <CardBody>
-        <p>Train-Name: {trainData.trainName}</p>
-        <p>Train-Number: {trainData.trainNumber}</p>
-        <p>Departure Time: {`${trainData.departureTime.Hours} : ${trainData.departureTime.Minutes} : ${trainData.departureTime.Seconds}`}</p>
-        <p>Seats-Available : AC: {trainData.seatsAvailable.AC}</p>
-        <p>Price : AC: {trainData.price.AC}</p>
-        <p>Seats-Available : Sleeper: {trainData.seatsAvailable.sleeper}</p>
-        <p>Price : Sleeper: {trainData.price.sleeper}</p>
-        <p>Delayed-By: {trainData.delayedBy}</p>
+          <p>Train-Name: {trainData.trainName}</p>
+          <p>Train-Number: {trainData.trainNumber}</p>
+          <p>Departure Time: {`${trainData.departureTime?.Hours} : ${trainData.departureTime?.Minutes} : ${trainData.departureTime?.Seconds}`}</p>
+          <p>Seats-Available : AC: {trainData.seatsAvailable?.AC}</p>
+          <p>Price : AC: {trainData.price?.AC}</p>
+          <p>Seats-Available : Sleeper: {trainData.seatsAvailable?.sleeper}</p>
+          <p>Price : Sleeper: {trainData.price?.sleeper}</p>
+          <p>Delayed-By: {trainData.delayedBy}</p>
         </CardBody>
       </Card>
       {/* <Table striped responsive>
@@ -90,7 +92,7 @@ const TrainDetails = ()=>{
         </tbody>
       </Table> */}
     </div>
-    </>
+  </>
 }
 
 export default TrainDetails;
